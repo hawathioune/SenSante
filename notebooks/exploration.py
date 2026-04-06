@@ -27,3 +27,4 @@ for region, count in df["region"].value_counts().head(5).items():
 print("--- Temperature moyenne par diagnostic ---")
 for diag, temp in df.groupby("diagnostic")["temperature"].mean().items():
     print(f"  {diag} : {temp:.1f} C")
+df.groupby(["sexe","diagnostic"]).size()
