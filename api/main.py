@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 import joblib
 import numpy as np
+from fastapi.middleware.cors import CORSMiddleware
 
 # Creer l'application
 app = FastAPI(
@@ -181,3 +182,28 @@ def predict(patient: PatientInput):
             "Consultez un médecin."
         )
     )
+
+
+
+@app.get("/model-info")
+def model_info():
+    return {
+        "type_modele": type(model).__name__,
+        "nombre_arbres": model.n_estimators,
+        "classes_possibles": model.classes_.tolist(),
+        "nombre_features": model.n_features_in_
+    }
+
+
+
+# Autoriser les requêtes depuis le frontend
+app.add_middleware(
+    CORSMiddleware,
+
+    # En développement : tout accepter
+    allow_origins=["*"],
+
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
